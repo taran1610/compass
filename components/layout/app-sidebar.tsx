@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { FileText, Lightbulb, ListOrdered, Map, Send } from "lucide-react";
+import { CreditCard, FileText, Lightbulb, ListOrdered, Map, Send } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { usePrompt } from "@/components/providers/prompt-provider";
 import { Button } from "@/components/ui/button";
@@ -125,6 +125,16 @@ export function AppSidebar({ files = [] }: AppSidebarProps) {
             <span className="truncate text-sm">{user?.email ?? "User"}</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuItem
+              onClick={async () => {
+                const res = await fetch("/api/stripe/portal", { method: "POST" });
+                const data = await res.json();
+                if (data?.url) window.location.href = data.url;
+              }}
+            >
+              <CreditCard className="mr-2 h-4 w-4" />
+              Manage Billing
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => signOut()}>
               Sign out
             </DropdownMenuItem>

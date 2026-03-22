@@ -3,17 +3,61 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Download, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { MermaidRenderer } from "@/components/output/mermaid-renderer";
+import { TipTapEditor } from "@/components/output/tiptap-editor";
+import type { OutputType } from "@/lib/types";
+
+type Output = {
+  id: string;
+  title: string;
+  content: string;
+  type?: OutputType;
+};
 
 type OutputPaneProps = {
-  outputs?: { id: string; title: string; content: string }[];
+  outputs?: Output[];
   activeTab?: string;
   onTabChange?: (tab: string) => void;
   onExport?: (id: string, format: "md" | "pdf") => void;
   onCopy?: (id: string) => void;
+  onContentChange?: (id: string, content: string) => void;
   className?: string;
 };
+
+function OutputContent({
+  output,
+  onContentChange,
+}: {
+  output: Output;
+  onContentChange?: (id: string, content: string) => void;
+}) {
+  if (output.type === "prd") {
+    return (
+      <TipTapEditor
+        content={output.content}
+        onChange={(html) => onContentChange?.(output.id, html)}
+        editable={true}
+      />
+    );
+  }
+
+  if (output.type === "mermaid" || /```mermaid/.test(output.content)) {
+    return <MermaidRenderer content={output.content} />;
+  }
+
+  return (
+    <pre className="whitespace-pre-wrap font-sans text-sm">{output.content}</pre>
+  );
+}
 
 export function OutputPane({
   outputs = [],
@@ -21,21 +65,22 @@ export function OutputPane({
   onTabChange,
   onExport,
   onCopy,
+  onContentChange,
   className,
 }: OutputPaneProps) {
   if (outputs.length === 0) {
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center rounded-lg border border-dashed bg-muted/20 p-8 text-center",
+          "flex flex-col items-center justify-center rounded-lg border border-dashed bg-muted/10 p-10 text-center",
           className
         )}
       >
-        <p className="text-sm text-muted-foreground">
-          Outputs will appear here when you run Quick Actions or chat.
+        <p className="text-sm font-medium text-muted-foreground">
+          Ask a question to get started
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Editable Markdown, Mermaid diagrams, and more.
+        <p className="mt-2 text-xs text-muted-foreground max-w-[200px]">
+          Try: &quot;Draft a PRD for dark mode&quot; or &quot;Create a Now/Next/Later roadmap&quot;
         </p>
       </div>
     );
@@ -69,18 +114,27 @@ export function OutputPane({
               >
                 <Copy className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onExport?.(output.id, "md")}
-              >
-                <Download className="h-4 w-4" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+                >
+                  <Download className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onExport?.(output.id, "md")}>
+                    Export as MD/HTML
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onExport?.(output.id, "pdf")}>
+                    Export as PDF
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <ScrollArea className="flex-1 rounded-md border bg-background p-4">
-              <pre className="whitespace-pre-wrap font-sans text-sm">
-                {output.content}
-              </pre>
+              <OutputContent
+                output={output}
+                onContentChange={onContentChange}
+              />
             </ScrollArea>
           </div>
         </TabsContent>

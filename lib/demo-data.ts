@@ -1,0 +1,161 @@
+/**
+ * Pre-computed demo data from public/demo-product-feedback.pdf
+ * Shown to new users with no documents so they experience the product.
+ */
+
+import type { ProductInsights } from "@/lib/rag/extract-insights";
+import type { DetectedOpportunityData } from "@/components/insights/opportunity-detected-card";
+import type { SuggestedFeature } from "@/components/tools/rice-suggested-features";
+
+export const DEMO_PRODUCT_INSIGHTS: ProductInsights = {
+  painPoints: [
+    "Onboarding flow is confusing — 40% of new users drop off in the first week",
+    "No API rate limit alerts — users hit limits during demos with no warning",
+    "Team collaboration requires workarounds — copying links in Slack instead of native comments",
+    "Onboarding assumes too much context — new users don't know where to start",
+    "Debugging tools are a bottleneck — AI generates code but error tracking integration is missing",
+    "Export fails for large datasets — timeouts over 10,000 rows",
+  ],
+  retentionRisks: [
+    { risk: "40% drop-off in first week due to onboarding friction", severity: "high" },
+    { risk: "Power users frustrated by lack of keyboard shortcuts and bulk export", severity: "medium" },
+    { risk: "Complex integrations need human support — docs alone insufficient", severity: "medium" },
+    { risk: "No proactive API limit notifications causing demo failures", severity: "high" },
+  ],
+  featureDemand: [
+    { name: "In-app onboarding redesign", mentions: 89, trend: "up" },
+    { name: "API rate limit alerts", mentions: 47, trend: "up" },
+    { name: "Team collaboration features", mentions: 34, trend: "up" },
+    { name: "Better debugging integration", mentions: 28, trend: "up" },
+    { name: "Bulk export scheduling", mentions: 19, trend: "neutral" },
+    { name: "Role-based onboarding flows", mentions: 12, trend: "up" },
+    { name: "Dedicated support for complex integrations", mentions: 8, trend: "neutral" },
+  ],
+  aiInsights: [
+    "In-app onboarding redesign is the top request across all sources — 89 feature request votes and 12 interview mentions suggest strong demand for role-based flows and interactive tours.",
+    "API rate limit alerts are critical for enterprise demos — 47 votes and 8 interview mentions indicate users need proactive email or webhook notifications before hitting limits.",
+    "Team collaboration (native comments, @mentions) would reduce friction — users currently copy links in Slack; 34 feature requests and 6 interview mentions support this.",
+    "Bulk export scheduling emerged from support tickets — 19 votes and 3 ticket mentions suggest weekly automated exports would address a clear gap.",
+  ],
+};
+
+export const DEMO_OPPORTUNITIES: DetectedOpportunityData[] = [
+  {
+    id: "demo-1",
+    title: "In-app onboarding redesign",
+    feature_requests: 89,
+    support_tickets: 0,
+    interview_mentions: 12,
+    reddit_mentions: 0,
+    x_mentions: 0,
+    product_review_mentions: 0,
+    competitor_missing: false,
+    competitor_names: [],
+    priority: "high",
+    confidence: 92,
+  },
+  {
+    id: "demo-2",
+    title: "API rate limit alerts",
+    feature_requests: 47,
+    support_tickets: 0,
+    interview_mentions: 8,
+    reddit_mentions: 0,
+    x_mentions: 0,
+    product_review_mentions: 0,
+    competitor_missing: false,
+    competitor_names: [],
+    priority: "high",
+    confidence: 88,
+  },
+  {
+    id: "demo-3",
+    title: "Team collaboration features",
+    feature_requests: 34,
+    support_tickets: 0,
+    interview_mentions: 6,
+    reddit_mentions: 0,
+    x_mentions: 0,
+    product_review_mentions: 0,
+    competitor_missing: false,
+    competitor_names: [],
+    priority: "medium",
+    confidence: 85,
+  },
+  {
+    id: "demo-4",
+    title: "Better debugging integration",
+    feature_requests: 28,
+    support_tickets: 0,
+    interview_mentions: 5,
+    reddit_mentions: 0,
+    x_mentions: 0,
+    product_review_mentions: 0,
+    competitor_missing: false,
+    competitor_names: [],
+    priority: "medium",
+    confidence: 82,
+  },
+  {
+    id: "demo-5",
+    title: "Bulk export scheduling",
+    feature_requests: 19,
+    support_tickets: 3,
+    interview_mentions: 0,
+    reddit_mentions: 0,
+    x_mentions: 0,
+    product_review_mentions: 0,
+    competitor_missing: false,
+    competitor_names: [],
+    priority: "medium",
+    confidence: 78,
+  },
+];
+
+export const DEMO_SUGGESTED_FEATURES: SuggestedFeature[] = [
+  {
+    id: "sug-1",
+    feature: "In-app onboarding redesign",
+    reach: 85,
+    impact: 3,
+    confidence: 92,
+    effort: 45,
+    reason: "89 feature requests, 12 interview mentions",
+  },
+  {
+    id: "sug-2",
+    feature: "API rate limit alerts",
+    reach: 70,
+    impact: 3,
+    confidence: 88,
+    effort: 15,
+    reason: "47 feature requests, 8 interview mentions",
+  },
+  {
+    id: "sug-3",
+    feature: "Team collaboration (comments, @mentions)",
+    reach: 65,
+    impact: 2,
+    confidence: 85,
+    effort: 55,
+    reason: "34 feature requests, 6 interview mentions",
+  },
+  {
+    id: "sug-4",
+    feature: "Error tracking integration",
+    reach: 50,
+    impact: 2,
+    confidence: 82,
+    effort: 35,
+    reason: "28 feature requests, 5 interview mentions",
+  },
+  {
+    id: "sug-5",
+    feature: "Bulk export scheduling",
+    reach: 40,
+    impact: 2,
+    confidence: 78,
+    effort: 25,
+    reason: "19 feature requests, 3 support ticket mentions",
+  },
+];
