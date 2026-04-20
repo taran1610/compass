@@ -13,6 +13,17 @@ function isPublic(pathname: string) {
 }
 
 export async function updateSession(request: NextRequest) {
+  // Fix: Supabase sometimes redirects to /?code=... instead of /auth/callback?code=...
+  const code = request.nextUrl.searchParams.get("code");
+  if (request.nextUrl.pathname === "/" && code) {
+    const url = new URL("/auth/callback", request.url);
+    url.searchParams.set("code", code);
+    if (request.nextUrl.searchParams.get("next")) {
+      url.searchParams.set("next", request.nextUrl.searchParams.get("next")!);
+    }
+    return NextResponse.redirect(url);
+  }
+
   let response = NextResponse.next({
     request,
   });
